@@ -96,7 +96,7 @@ class CtlPath(implicit val conf: SodorCoreParams) extends Module
      val upc_rom_target = UInt(label_sz.W)
 //     override def clone = this.asInstanceOf[this.type]
   })
-  require(label_sz == 8, "Label size must be 8")
+//require(label_sz == 8, "Label size must be 8")
 
   val mem_is_busy = !io.mem.resp.valid && (cs.en_mem || cs.mem_wr)
 

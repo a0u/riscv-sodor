@@ -7,7 +7,7 @@ CFLAGS := -O2 -g -Wall -std=gnu99 -mcmodel=medany -fno-common -fno-builtin-print
 	-I ../env/p -I ../env/
 LDFLAGS := -static -nostdlib -nostartfiles -T ../env/p/link.ld
 
-programs := movn yourinst
+programs := movn bf-hello bf-golden
 bins := $(addprefix rv32ui-p-,$(programs))
 dumps := $(addsuffix .dump,$(bins))
 

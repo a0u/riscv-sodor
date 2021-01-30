@@ -425,5 +425,199 @@ object Microcode
    /* TODO: Add the microcode for your custom instruction here */
 
 
+   /* Brainfuck intepreter */
+                         ,Label("BRAINFUCK")
+   /* Fetch brainfuck instruction into Reg[rd] */
+   /* A <- Reg[rs1]    */,                  Signals(Cat(CSR.N, LDIR_0, RS_RS1, RWR_0, REN_1, LDA_1, LDB_X, ALU_X      , AEN_0, LDMA_1, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* MA <- Reg[rs1]   */
+   /* Reg[rs1] <- A+1  */,                  Signals(Cat(CSR.N, LDIR_0, RS_RS1, RWR_1, REN_0, LDA_X, LDB_X, ALU_INC_A_1, AEN_1, LDMA_0, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* Reg[rd] <- Mem   */,                  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_1, REN_0, LDA_X, LDB_X, ALU_X      , AEN_0, LDMA_0, MWR_0, MEN_1, MT_BU, IS_X , IEN_0, UBR_S), "X")
+
+   /* Dispatch for '+' (0b0101011) */
+   /* A <- Reg[x0]     */,                  Signals(Cat(CSR.N, LDIR_0, RS_X0 , RWR_0, REN_1, LDA_1, LDB_X, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* B <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_1, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_X, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+
+   /* B <- Reg[rd]     */,                  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_0, REN_1, LDA_0, LDB_1, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* MA <- R[rs2]     */,                  Signals(Cat(CSR.N, LDIR_0, RS_RS2, RWR_0, REN_1, LDA_0, LDB_0, ALU_SUB    , AEN_0, LDMA_1, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BF_+")
+   /* if zero?(A-B)    */
+   /*   UBr to BF_+    */
+
+   /* Dispatch for '-' (0b0101101) */
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_0, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_0, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* if zero?(A-B)    */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_0, LDB_0, ALU_SUB    , AEN_0, LDMA_0, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BF_-")
+   /*   UBr to BF_-    */
+
+   /* Dispatch for '.' (0b0101110) */
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_0, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* if zero?(A-B)    */,                  Signals(Cat(CSR.N, LDIR_0, RS_X0 , RWR_0, REN_1, LDA_1, LDB_X, ALU_SUB    , AEN_0, LDMA_0, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BF_.")
+   /*   UBr to BF_.    */
+   /* A <- Reg[x0]     */
+
+
+   /* Dispatch for '<' (0b0111100) */
+   /* B <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_1, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+
+   /* B <- Reg[rd]     */,                  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_0, REN_1, LDA_0, LDB_1, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* if zero?(A-B)    */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_0, LDB_0, ALU_SUB    , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BF_<")
+   /*   UBr to BF_<    */
+
+   /* Dispatch for '>' (0b0111110) */
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* if zero?(A-B)    */,                  Signals(Cat(CSR.N, LDIR_0, RS_X0 , RWR_0, REN_1, LDA_1, LDB_X, ALU_SUB    , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BF_>")
+   /*   UBr to BF_<    */
+   /* A <- Reg[x0]     */
+
+
+   /* Dispatch for '[' (0b1011011) */
+   /* B <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_1, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A << B      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SLL    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+
+   /* B <- Reg[rd]     */,                  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_0, REN_1, LDA_0, LDB_1, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* MA <- Reg[rs2]   */,                  Signals(Cat(CSR.N, LDIR_0, RS_RS2, RWR_0, REN_1, LDA_0, LDB_0, ALU_SUB    , AEN_0, LDMA_1, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BF_[")
+   /* if zero?(A-B)    */
+   /*   UBr to BF_[    */
+
+   /* Dispatch for ']' (0b1011101) */
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_0, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_0, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* if zero?(A-B)    */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_0, LDB_X, ALU_SUB    , AEN_0, LDMA_0, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BF_]")
+   /*   UBr to BF_]    */
+
+   /* Skip unrecognized brainfuck instruction */
+   /* UBr to BRAINFUCK */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_X, LDB_X, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_J), "BRAINFUCK")
+
+
+   /* Execute '+' instruction */
+   /* Precondition: MA == Reg[rs2] */
+   /* A <- Mem         */,Label("BF_+"),    Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_X, ALU_X      , AEN_0, LDMA_0, MWR_0, MEN_1, MT_BU, IS_X , IEN_0, UBR_S), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_X, ALU_INC_A_1, AEN_1, LDMA_0, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* Mem <- A         */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_0, LDB_X, ALU_COPY_A , AEN_1, LDMA_0, MWR_1, MEN_0, MT_BU, IS_X , IEN_0, UBR_S), "X")
+   /* UBr to BRAINFUCK */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_X, LDB_X, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_J), "BRAINFUCK")
+
+   /* Execute '-' instruction */
+   /* Precondition: MA == Reg[rs2] */
+   /* A <- Mem         */,Label("BF_-"),    Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_X, ALU_X      , AEN_0, LDMA_0, MWR_0, MEN_1, MT_BU, IS_X , IEN_0, UBR_S), "X")
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_X, ALU_DEC_A_1, AEN_1, LDMA_0, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* Mem <- A         */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_0, LDB_X, ALU_COPY_A , AEN_1, LDMA_0, MWR_1, MEN_0, MT_BU, IS_X , IEN_0, UBR_S), "X")
+   /* UBr to BRAINFUCK */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_X, LDB_X, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_J), "BRAINFUCK")
+
+   /* Execute '.' instruction */
+   /* Precondition: MA == Reg[rs2] */
+   /* R[rd] <- Mem     */,Label("BF_."),    Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_1, REN_0, LDA_X, LDB_X, ALU_X      , AEN_0, LDMA_0, MWR_0, MEN_1, MT_BU, IS_X , IEN_0, UBR_S), "X")
+   /* UBr to FETCH     */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_X, LDB_X, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_J), "FETCH")
+
+   /* Execute '<' instruction */
+   /* A <- Reg[rs2]    */,Label("BF_<"),    Signals(Cat(CSR.N, LDIR_0, RS_RS2, RWR_0, REN_1, LDA_1, LDB_X, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* Reg[rs2] <- A-1  */,                  Signals(Cat(CSR.N, LDIR_0, RS_RS2, RWR_1, REN_0, LDA_X, LDB_X, ALU_DEC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_J), "BRAINFUCK")
+   /* UBr to BRAINFUCK */
+
+   /* Execute '>' instruction */
+   /* A <- Reg[rs2]    */,Label("BF_>"),    Signals(Cat(CSR.N, LDIR_0, RS_RS2, RWR_0, REN_1, LDA_1, LDB_X, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* Reg[rs2] <- A+1  */,                  Signals(Cat(CSR.N, LDIR_0, RS_RS2, RWR_1, REN_0, LDA_X, LDB_X, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_J), "BRAINFUCK")
+   /* UBr to BRAINFUCK */
+
+
+   /* Execute '[' instruction */
+   /* Precondition: A == 0x5B '[' */
+   /* B <- Mem         */,Label("BF_["),    Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_0, LDB_1, ALU_X      , AEN_0, LDMA_0, MWR_0, MEN_1, MT_BU, IS_X , IEN_0, UBR_S), "X")
+   /* if not zero?(B)  */,                  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_1, REN_0, LDA_0, LDB_X, ALU_COPY_B , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_NZ), "BRAINFUCK")
+   /*   UBr to BRAINFUCK */
+   /* Reg[rd] <- B = 0 */
+   /* B <- A           */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_X, LDB_1, ALU_COPY_A , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+
+   /* Use Reg[rd] to hold nesting level, B to hold '[' constant */
+   /* MA <- Reg[rs1]  */,Label("BF_[_LOOP"),Signals(Cat(CSR.N, LDIR_0, RS_RS1, RWR_0, REN_1, LDA_1, LDB_0, ALU_X      , AEN_0, LDMA_1, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- Reg[rs1]    */
+   /* Reg[rs1] <- A+1  */,                  Signals(Cat(CSR.N, LDIR_0, RS_RS1, RWR_1, REN_0, LDA_X, LDB_0, ALU_INC_A_1, AEN_1, LDMA_0, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* A <- Mem         */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_X      , AEN_0, LDMA_0, MWR_0, MEN_1, MT_BU, IS_X , IEN_0, UBR_S), "X")
+   /* if zero?(A-B)    */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SUB    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BF_[_[")
+   /*   UBr to BF_[_[  */
+   /* A <- A - B       */
+   /* A <- A - 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_DEC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* if zero?(A-1)    */,                  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_0, REN_1, LDA_1, LDB_0, ALU_DEC_A_1, AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BF_[_]")
+   /*   UBr to BF_[_]  */
+   /* A <- Reg[rd]     */
+   /* UBr to BF_[_LOOP */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_X, LDB_0, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_J), "BF_[_LOOP")
+
+   /* A <- Reg[rd]     */,Label("BF_[_["),  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_0, REN_1, LDA_1, LDB_0, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* Reg[rd] <- A + 1 */,                  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_1, REN_0, LDA_X, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_J), "BF_[_LOOP")
+   /* UBr to BF_[_LOOP */
+
+   /* Precondition: A == Reg[rd] */
+   /* if zero?(A)      */,Label("BF_[_]"),  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_0, LDB_0, ALU_COPY_A , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BRAINFUCK")
+   /*   UBr to BRAINFUCK */
+   /* Reg[rd] <- A - 1 */,                  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_1, REN_0, LDA_X, LDB_0, ALU_DEC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_J), "BF_[_LOOP")
+   /* UBr to BF_[_LOOP */
+
+
+   /* Execute ']' instruction */
+   /* Precondition: A == 0x5D ']' */
+   /* B <- Mem         */,Label("BF_]"),    Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_0, LDB_1, ALU_X      , AEN_0, LDMA_0, MWR_0, MEN_1, MT_BU, IS_X , IEN_0, UBR_S), "X")
+   /* if zero?(B)      */,                  Signals(Cat(CSR.N, LDIR_0, RS_X0 , RWR_0, REN_1, LDA_0, LDB_1, ALU_COPY_B , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BRAINFUCK")
+   /*   UBr to BRAINFUCK */
+   /* B <- Reg[x0]     */
+   /* Reg[rd] <- B = 0 */,                  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_1, REN_0, LDA_0, LDB_X, ALU_COPY_B , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* B <- A           */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_X, LDB_1, ALU_COPY_A , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* Unwind instruction pointer to current ']' */
+   /* A <- Reg[rs1]    */,                  Signals(Cat(CSR.N, LDIR_0, RS_RS1, RWR_0, REN_1, LDA_1, LDB_0, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* Reg[rs1] <- A-1  */,                  Signals(Cat(CSR.N, LDIR_0, RS_RS1, RWR_1, REN_0, LDA_X, LDB_0, ALU_DEC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+
+   /* Use Reg[rd] to hold nesting level, B to hold ']' constant */
+   /* A <- Reg[rs1]   */,Label("BF_]_LOOP"),Signals(Cat(CSR.N, LDIR_0, RS_RS1, RWR_0, REN_1, LDA_1, LDB_0, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* Reg[rs1] <- A-1  */,                  Signals(Cat(CSR.N, LDIR_0, RS_RS1, RWR_1, REN_0, LDA_X, LDB_0, ALU_DEC_A_1, AEN_1, LDMA_1, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* MA <- A - 1      */
+   /* A <- Mem         */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_X      , AEN_0, LDMA_0, MWR_0, MEN_1, MT_BU, IS_X , IEN_0, UBR_S), "X")
+   /* if zero?(A-B)    */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_SUB    , AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BF_]_]")
+   /*   UBr to BF_]_]  */
+   /* A <- A - B       */
+   /* A <- A + 1       */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_1, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* if zero?(A+1)    */,                  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_0, REN_1, LDA_1, LDB_0, ALU_INC_A_1, AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BF_]_[")
+   /*   UBr to BF_]_[  */
+   /* A <- Reg[rd]     */
+   /* UBr to BF_]_LOOP */,                  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_X, LDB_0, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_J), "BF_]_LOOP")
+
+   /* A <- Reg[rd]     */,Label("BF_]_]"),  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_0, REN_1, LDA_1, LDB_0, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* Reg[rd] <- A + 1 */,                  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_1, REN_0, LDA_X, LDB_0, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_J), "BF_]_LOOP")
+   /* UBr to BF_]_LOOP */
+
+   /* Precondition: A == Reg[rd] */
+   /* if zero?(A)      */,Label("BF_]_["),  Signals(Cat(CSR.N, LDIR_0, RS_X  , RWR_0, REN_0, LDA_0, LDB_0, ALU_COPY_A , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_EZ), "BF_]_TAIL")
+   /*   UBr to BF_]_TAIL */
+   /* Reg[rd] <- A - 1 */,                  Signals(Cat(CSR.N, LDIR_0, RS_RD , RWR_1, REN_0, LDA_X, LDB_0, ALU_DEC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_J), "BF_]_LOOP")
+   /* UBr to BF_]_LOOP */
+   /* A <- Reg[rs1]   */,Label("BF_]_TAIL"),Signals(Cat(CSR.N, LDIR_0, RS_RS1, RWR_0, REN_1, LDA_1, LDB_X, ALU_X      , AEN_0, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_N), "X")
+   /* Reg[rs1] <- A+1  */,                  Signals(Cat(CSR.N, LDIR_0, RS_RS1, RWR_1, REN_0, LDA_X, LDB_X, ALU_INC_A_1, AEN_1, LDMA_X, MWR_0, MEN_0, MT_X , IS_X , IEN_0, UBR_J), "BRAINFUCK")
+   /* UBr to BRAINFUCK */
+
  )
 }
